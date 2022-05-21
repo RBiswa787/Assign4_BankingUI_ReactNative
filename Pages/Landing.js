@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View,Image, TouchableOpacity,TextInput } from "react-native";
+import { StyleSheet, Text, View,Image, TouchableOpacity,TextInput, ScrollView, Modal, ActivityIndicator } from "react-native";
 import { Component } from "react/cjs/react.production.min";
 
 
@@ -9,7 +9,8 @@ export default class Landing extends Component {
         super();
      
         this.state={
-    
+          modalVisible: false,
+          loading: false,
         }
      
       }
@@ -30,17 +31,38 @@ export default class Landing extends Component {
       />
          </View>
        </View>
+       <Modal visible={this.state.modalVisible}
+       style={styles.modal}
+       transparent={true}>
+         <View style={styles.balance}>
+         <ActivityIndicator size="large" style={styles.activity} animating={this.state.loading} hidesWhenStopped={true} />
+           <TouchableOpacity style={styles.close} onPress={() => { this.setState({ modalVisible:false }) }}>
+             <Text style={styles.closetext}>Close</Text>
+           </TouchableOpacity>
+           {!this.state.loading &&
+           <Text style={styles.balmain}>Balance</Text>}
+           {!this.state.loading &&
+           <Text style={styles.balsub}>$25400.75</Text>}
+         </View>
+        </Modal>
+      <TouchableOpacity style={styles.cardclick} onPress={() => { this.setState({ modalVisible:true })
+    this.setState({loading:true})
+    setTimeout(() => {
+      this.setState({loading:false})
+    }, 2000);
+    }}>
        <Image
         style={styles.cardpic}
         source={require('../assets/cardd.png')}
       />
+      </TouchableOpacity>
        <View style={styles.catg}>
          <View style={styles.catname}>
          <Text style={styles.cattext}>Categories</Text>
          </View>
        </View>
        <View style={styles.choices}>
-         <View style={styles.choice}>
+         <TouchableOpacity style={styles.choice}>
            <View style={styles.img}>
            <Image
         style={styles.itempic}
@@ -50,8 +72,8 @@ export default class Landing extends Component {
            <View style={styles.key}>
            <Text style={styles.chtext}>Send</Text>
            </View>
-         </View>
-         <View style={styles.choice}>
+         </TouchableOpacity>
+         <TouchableOpacity style={styles.choice}>
            <View style={styles.img}>
            <Image
         style={styles.itempic}
@@ -61,8 +83,8 @@ export default class Landing extends Component {
            <View style={styles.key}>
            <Text style={styles.chtext}>Bill</Text>
            </View>
-         </View>
-         <View style={styles.choice}>
+         </TouchableOpacity>
+         <TouchableOpacity style={styles.choice}>
            <View style={styles.img}>
            <Image
         style={styles.itempic}
@@ -72,8 +94,8 @@ export default class Landing extends Component {
            <View style={styles.key}>
            <Text style={styles.chtext}>Grocery</Text>
            </View>
-         </View>
-         <View style={styles.choice}>
+         </TouchableOpacity>
+         <TouchableOpacity style={styles.choice}>
            <View style={styles.img}>
            <Image
         style={styles.itempic}
@@ -83,15 +105,51 @@ export default class Landing extends Component {
            <View style={styles.key}>
            <Text style={styles.chtext}>More</Text>
            </View>
-         </View>
+         </TouchableOpacity>
        </View>
        <View style={styles.tranhead}>
          <View style={styles.tranname}>
            <Text style={styles.cattext}>Transactions</Text>
            </View>
          <View style={styles.transee}>
+          <TouchableOpacity>
          <Text style={styles.seetext}>See All</Text>
+        </TouchableOpacity>
          </View>
+       </View>
+       <ScrollView style={styles.scroll}>
+       <View style={styles.item}>
+       <View style={styles.comppic}>
+       <Image
+        style={styles.profpic}
+        source={require('../assets/udem-modified.png')}
+      />
+         </View>
+         <View style={styles.trancomp}>
+         <Text style={styles.trantext}>Udemy Course</Text>
+         </View>
+         <View style={styles.transub}>
+         <Text style={styles.subtext}>15th Jan 2021</Text>
+         </View>
+         <View style={styles.tranamt}>
+         <Text style={styles.amttext}>$90.25</Text>
+         </View>
+       </View>
+       <View style={styles.item}>
+       <View style={styles.comppic}>
+       <Image
+        style={styles.profpic}
+        source={require('../assets/uip-modified.png')}
+      />
+         </View>
+         <View style={styles.trancomp}>
+         <Text style={styles.trantext}>Michelle Johnson</Text>
+         </View>
+         <View style={styles.transub}>
+         <Text style={styles.subtext}>9th Jan 2021</Text>
+         </View>
+         <View style={styles.tranamt}>
+         <Text style={styles.amttext}>$270.25</Text></View> 
        </View>
        <View style={styles.item}>
        <View style={styles.comppic}>
@@ -126,6 +184,7 @@ export default class Landing extends Component {
          <View style={styles.tranamt}>
          <Text style={styles.amttext}>$195.25</Text></View> 
        </View>
+       </ScrollView>
        <Image
         style={styles.subpic}
         source={require('../assets/Subtract.png')}
@@ -187,7 +246,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     width: "95%",
-    aspectRatio: 2,
+    aspectRatio: 2.2,
     marginTop: "1 %",
     alignItems: "center",
     justifyContent: "center"
@@ -292,7 +351,7 @@ const styles = StyleSheet.create({
   },
   cardpic: {
     resizeMode: "contain",
-    height: "30%"
+    height: "100%"
   },
   cattext: { 
     display:"flex",
@@ -412,5 +471,58 @@ const styles = StyleSheet.create({
   iconpic: {
     resizeMode: "contain",
     width: "70%"
+  },
+  modal: {
+    display : "flex", 
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems :"center"
+  },
+  cardclick:{
+    height: "31%"
+  },
+  balance: {
+    display: "flex",
+    backgroundColor: "white",
+    width: "90%",
+    aspectRatio: 1.5,
+    marginTop: "25%",
+    marginLeft: "5%",
+    alignItems: "center",
+    borderRadius: 15,
+    elevation: 7
+  },
+  close:{
+    display: "flex",
+    width: "50%",
+    height: "20%",
+    backgroundColor: "#FF8B60",
+    borderRadius: 30,
+    elevation: 10,
+    marginTop: "18%",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  closetext: {
+    fontSize: 18,
+    color: "white",
+    fontWeight: "700"
+  },
+  activity: {
+    marginTop: "20%",
+    size: "30"
+  },
+  balmain: {
+    fontSize: 23,
+    fontWeight: "400",
+    marginTop: "-55%",
+    marginLeft: "-60%"
+  },
+  balsub: {
+    fontSize: 30,
+    fontWeight: "600",
+    marginLeft: "-43%",
+    marginTop: "3%"
   }
 });
